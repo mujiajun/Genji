@@ -66,7 +66,7 @@
     </div>
 
     <template>
-      <el-dialog fullscreen
+      <el-dialog fullscreen :modal="noShowModal"
         :title="articleTitle"
         :visible.sync="dialogVisible">
         <span>{{articleIndex}}</span>
@@ -79,15 +79,16 @@
 <script>
 export default {
   name: "contentlist",
-  data() { 
+  data() {
     return {
+      noShowModal:false,
       query: "",
       articleTitle: "",
       articleIndex: "",
       dialogVisible: false,
       currentDate: new Date(),
       options: [
-         {
+        {
           value: "0",
           label: "全部"
         },
@@ -121,14 +122,23 @@ export default {
       this.articleIndex = index;
       this.articleTitle = `标题${index}`;
     },
-    queryArticle(){
-      alert(this.value)
+    queryArticle() {
+      alert(this.value);
     }
   }
 };
 </script>
 
 <style>
+.el-dialog__wrapper {
+  position: fixed;
+  top: 0;
+  right: 20%;
+  bottom: 0;
+  overflow: auto;
+  left: 15%;
+  width: 66%;
+}
 .adarea {
   margin-top: 20%;
 }
