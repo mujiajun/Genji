@@ -66,10 +66,15 @@
     </div>
 
     <template>
-      <el-dialog fullscreen :modal="noShowModal"
-        :title="articleTitle"
-        :visible.sync="dialogVisible">
-        <span>{{articleIndex}}</span>
+      <el-dialog fullscreen 
+        center
+        :modal="noShowModal"
+        :visible.sync="dialogVisible"
+        @close="closeone"
+        @open="getone">
+        <x-article  v-if="hackset"
+                    :articleId="articleIndex"
+                    ref="xarticle"></x-article>
       </el-dialog>
     </template>
   </div>
@@ -77,13 +82,17 @@
 
 
 <script>
+import article from "./article";
 export default {
   name: "contentlist",
+  components: {
+    "x-article": article
+  },
   data() {
     return {
       noShowModal: false,
       query: "",
-      articleTitle: "",
+      hackset: false,
       articleIndex: "",
       dialogVisible: false,
       currentDate: new Date(),
@@ -120,10 +129,17 @@ export default {
     read(index) {
       this.dialogVisible = true;
       this.articleIndex = index;
-      this.articleTitle = `标题${index}`;
     },
     queryArticle() {
       alert(this.value);
+    },
+    closeone() {
+      this.hackset = false;
+      this.refs.xarticle.closeone();
+    },
+    getone() {
+      this.hackset = true;
+      this.refs.xarticle.getone();
     }
   }
 };

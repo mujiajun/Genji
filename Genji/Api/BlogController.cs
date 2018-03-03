@@ -9,7 +9,8 @@ namespace Genji.Api
     [Route("api/Blog")]
     public class BlogController : Controller
     {
-        [HttpGet("{id}")]
+        [Route("getone")]
+        [HttpGet]
         public object Get(int id)
         {
             var result = new XResult();
