@@ -8,7 +8,7 @@
     <el-row>
       <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 1 : 0">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="http://element.eleme.io/static/hamburger.50e4091.png" class="image">
+          <img src="../../../assets/images/header.jpg" class="image">
           <div style="padding: 10px;">
             <span>好吃的汉堡</span>
             <div class="bottom clearfix">
@@ -22,7 +22,7 @@
     <el-row>
       <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 1 : 0">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="http://element.eleme.io/static/hamburger.50e4091.png" class="image">
+          <img src="../../../assets/images/header.jpg" class="image">
           <div style="padding: 10px;">
             <span>好吃的汉堡</span>
             <div class="bottom clearfix">
@@ -81,7 +81,7 @@ export default {
   name: "contentlist",
   data() {
     return {
-      noShowModal:false,
+      noShowModal: false,
       query: "",
       articleTitle: "",
       articleIndex: "",
@@ -130,15 +130,18 @@ export default {
 </script>
 
 <style>
-.el-dialog__wrapper {
-  position: fixed;
-  top: 0;
-  right: 20%;
-  bottom: 0;
-  overflow: auto;
-  left: 15%;
-  width: 66%;
+@media screen and (min-height: 768px) {
+  .el-dialog__wrapper {
+    position: fixed;
+    top: 0;
+    right: 20%;
+    bottom: 0;
+    overflow: auto;
+    left: 15%;
+    width: 66%;
+  }
 }
+
 .adarea {
   margin-top: 20%;
 }
