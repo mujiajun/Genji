@@ -5,13 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.4" />
-    <PackageReference Include="MySql.Data" Version="6.10.6" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <Compile Remove="Blog\**" />
+    <EmbeddedResource Remove="Blog\**" />
+    <None Remove="Blog\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Blog\" />
+    <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="MySql.Data" Version="6.10.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
 
 </Project>

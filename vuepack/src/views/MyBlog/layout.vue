@@ -1,42 +1,45 @@
 <template>
   <div>
     <el-container>
-      <el-header>徐徐赵赵</el-header>
+      
       <el-container>
         <el-aside>
           <div>
-            <img id="xbackground" src="http://element.eleme.io/static/hamburger.50e4091.png" />
+            <img id="xbackground" src="../../../assets/images/header.jpg" />
           </div>
           <div class="xnav">
-            <h1>xuxuzhaozhao</h1>
-            <p>Charp Progarmmer</p><br/>
+            <h1>徐 程 意</h1>
+            <p>CSharp Progarmmer</p><br/>
             <div>
               <a href="https://www.xuxuzhaozhao.top" target="_blank">
-                <p>首页▪印象</p>
+                <p class="zhuangbi"><i class="fa fa-home"></i>&nbsp;&nbsp;首&nbsp;页</p>
               </a>
               <a href="https://blog.xuxuzhaozhao.top" target="_blank">
-                <p>文章▪类别</p>
+                <p class="zhuangbi"><i class="fa fa-file-code-o"></i>&nbsp;&nbsp;文&nbsp;章</p>
               </a>
               <a href="https://www.xuxuzhaozhao.top/tools" target="_blank">
-                <p>精品▪工具</p>
+                <p class="zhuangbi"><i class="fa fa-th-large"></i>&nbsp;&nbsp;工&nbsp;具</p>
               </a>
               <a href="https://www.xuxuzhaozhao.top/advice" target="_blank">
-                <p>留言▪建议</p>
+                <p class="zhuangbi"><i class="fa fa-inbox"></i>&nbsp;&nbsp;留&nbsp;言</p>
               </a>
-            </div>
+            </div><br/>
+            <a href="https://www.xuxuzhaozhao.top/resume" target="_blank">
+                <p style="margin-left:-20px;"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;关于我</p>
+              </a>
           </div>
           <div class="xlink">
-            <a href="http://github.com/xuxuzhaozhao" target="_blank">
-              <i class="fa fa-github"></i>
+            <a href="https://www.google.com" target="_blank">
+              <i class="fa fa-google fa-2x"></i>
+            </a>
+            <a href="https://github.com/xuxuzhaozhao" target="_blank">
+              <i class="fa fa-github fa-2x"></i>
             </a>
             <a href="http://github.com/xuxuzhaozhao" target="_blank">
-              <i class="fa fa-github"></i>
+              <i class="fa fa-weibo fa-2x"></i>
             </a>
             <a href="http://github.com/xuxuzhaozhao" target="_blank">
-              <i class="fa fa-github"></i>
-            </a>
-            <a href="http://github.com/xuxuzhaozhao" target="_blank">
-              <i class="fa fa-github"></i>
+              <i class="fa fa-qq fa-2x"></i>
             </a>
           </div>
         </el-aside>
@@ -61,6 +64,13 @@ export default {
 </script>
 
 <style>
+.fa{
+  margin-left: 15px;
+}
+.zhuangbi{
+  margin-left: -20px;
+  margin-top: 15px;
+}
 .xnav {
   margin-bottom: 20%;
 }
@@ -110,7 +120,7 @@ export default {
 
 @media screen and (min-width: 768px) {
   .el-aside {
-    width: 20% !important;
+    width: 15% !important;
   }
 }
 </style>

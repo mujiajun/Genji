@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <el-select v-model="value" placeholder="全部">
+    <el-select v-model="value" placeholder="全部" @change="queryArticle">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
     </el-select>
@@ -13,7 +13,7 @@
             <span>好吃的汉堡</span>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="text" class="button" @click="read(index)">阅读</el-button>
             </div>
           </div>
         </el-card>
@@ -27,41 +27,139 @@
             <span>好吃的汉堡</span>
             <div class="bottom clearfix">
               <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button">操作按钮</el-button>
+              <el-button type="text" class="button" @click="read(index)">阅 读</el-button>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
     <div class="tags">
+      <el-input v-model="query" placeholder="请输入内容"></el-input>
+      <el-button class="btnquery" type="success" plain size="mini" icon="el-icon-search">全局搜索</el-button><br/>
 
+      <span>-------------------------------------------</span>
+      <div class="realTags">
+        <el-tag>标签一</el-tag>
+        <el-tag type="success">标签二</el-tag>
+        <el-tag type="info">标签三</el-tag>
+        <el-tag type="warning">标签四</el-tag>
+        <el-tag type="danger">标签五</el-tag>
+      </div>
+      <span>-------------------------------------------</span>
+      <div class="adarea">
+        <el-card>
+          <img src="../../../assets/images/heilongtan.jpg" class="image">
+          <div style="padding: 14px;">
+            <span>黑龙滩旅游</span>
+            <div class="bottom clearfix">
+              <el-button type="text" class="button">了解下</el-button>
+            </div>
+          </div>
+        </el-card>
+      </div>
     </div>
     <div class="xpagination">
-
+      <el-button-group>
+        <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
+        <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+      </el-button-group>
     </div>
+
+    <template>
+      <el-dialog fullscreen
+        :title="articleTitle"
+        :visible.sync="dialogVisible">
+        <span>{{articleIndex}}</span>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
+
+<script>
+export default {
+  name: "contentlist",
+  data() { 
+    return {
+      query: "",
+      articleTitle: "",
+      articleIndex: "",
+      dialogVisible: false,
+      currentDate: new Date(),
+      options: [
+         {
+          value: "0",
+          label: "全部"
+        },
+        {
+          value: "选项1",
+          label: "黄金糕"
+        },
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
+        }
+      ],
+      value: ""
+    };
+  },
+  methods: {
+    read(index) {
+      this.dialogVisible = true;
+      this.articleIndex = index;
+      this.articleTitle = `标题${index}`;
+    },
+    queryArticle(){
+      alert(this.value)
+    }
+  }
+};
+</script>
+
 <style>
-.xpagination{
-  width: 10%;
+.adarea {
+  margin-top: 20%;
+}
+.realTags {
+  margin-top: 30px;
+}
+.realTags .el-tag {
+  margin-top: 5px;
+}
+
+.btnquery {
+  margin-left: 190px;
+  margin-top: 10px;
+}
+.xpagination {
+  width: 15%;
   height: 60px;
-  background-color: rgb(255, 127, 127);
   position: fixed;
-  right: 360px;
-  top: 860px;
+  right: 342px;
+  top: 848x;
 }
 .el-select {
-  margin-left: -80%;
-  margin-top: 51px;
+  margin-left: -81%;
+  margin-top: 0px;
 }
 .tags {
   width: 15%;
   height: 850px;
-  background-color: aquamarine;
   position: fixed;
   right: 30px;
-  top: 71px;
+  top: 40px;
 }
 .el-row {
   margin: 50px;
@@ -98,37 +196,3 @@
   clear: both;
 }
 </style>
-
-<script>
-export default {
-  name: "contentlist",
-  data() {
-    return {
-      currentDate: new Date(),
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      value: ""
-    };
-  }
-};
-</script>

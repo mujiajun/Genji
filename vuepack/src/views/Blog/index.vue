@@ -186,7 +186,10 @@ export default {
     editArticle() {
       this.dialogEditVisible = false;
       this.$http
-        .put(`http://localhost:9817/api/blog/${this.editContent.id}`, this.editContent)
+        .put(
+          `http://localhost:9817/api/blog/${this.editContent.id}`,
+          this.editContent
+        )
         .then(res => {
           if (res.data.code === 20000) {
             this.$message({
