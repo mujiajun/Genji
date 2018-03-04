@@ -6,28 +6,28 @@
       </el-option>
     </el-select>
     <el-row>
-      <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 1 : 0">
+      <el-col :span="4" v-for="(o, index) in articleList.slice(0, 4)" :key="index" :offset="index > 0 ? 1 : 0">
         <el-card :body-style="{ padding: '0px' }">
           <img src="../../../assets/images/header.jpg" class="image">
           <div style="padding: 10px;">
-            <span>好吃的汉堡</span>
+            <span>{{o.title}}</span>
             <div class="bottom clearfix">
-              <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button" @click="read(index)">阅读</el-button>
+              <time class="time">{{o.createTime}}</time>
+              <el-button type="text" class="button" @click="read(o.content)">阅 读</el-button>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 1 : 0">
+      <el-col :span="4" v-for="(o, index) in articleList.slice(4)" :key="index" :offset="index > 0 ? 1 : 0">
         <el-card :body-style="{ padding: '0px' }">
           <img src="../../../assets/images/header.jpg" class="image">
           <div style="padding: 10px;">
-            <span>好吃的汉堡</span>
+            <span>{{o.title}}</span>
             <div class="bottom clearfix">
-              <time class="time">{{ currentDate }}</time>
-              <el-button type="text" class="button" @click="read(index)">阅 读</el-button>
+              <time class="time">{{ o.createTime }}</time>
+              <el-button type="text" class="button" @click="read(o.content)">阅 读</el-button>
             </div>
           </div>
         </el-card>
@@ -60,8 +60,8 @@
     </div>
     <div class="xpagination">
       <el-button-group>
-        <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
-        <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+        <el-button type="primary" plain size="small" icon="el-icon-arrow-left">上一页</el-button>
+        <el-button type="primary" plain size="small">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
       </el-button-group>
     </div>
 
@@ -90,7 +90,12 @@ export default {
   },
   data() {
     return {
+      xpagination: {
+        index: 0,
+        size: 8
+      },
       noShowModal: false,
+      articleList: [],
       query: "",
       hackset: false,
       articleIndex: "",
@@ -125,10 +130,13 @@ export default {
       value: ""
     };
   },
+  created() {
+    this.getAll(this.xpagination);
+  },
   methods: {
-    read(index) {
+    read(content) {
       this.dialogVisible = true;
-      this.articleIndex = index;
+      this.articleIndex = content;
     },
     queryArticle() {
       alert(this.value);
@@ -140,6 +148,21 @@ export default {
     getone() {
       this.hackset = true;
       this.refs.xarticle.getone();
+    },
+    getAll(xpagination) {
+      this.$http
+        .post("http://localhost:9817/api/Blog/getlist", this.xpagination)
+        .then(res => {
+          if (res.data.code === 20000) {
+            this.articleList = res.data.data;
+          } else {
+            this.$message({
+              message: res.data.message,
+              type: "error"
+            });
+          }
+        })
+        .catch(() => {});
     }
   }
 };
@@ -176,7 +199,7 @@ export default {
   width: 15%;
   height: 60px;
   position: fixed;
-  right: 342px;
+  right: 323px;
   top: 848x;
 }
 .el-select {

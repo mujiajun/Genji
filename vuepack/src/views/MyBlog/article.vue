@@ -36,17 +36,20 @@ export default {
     this.getone();
   },
   methods: {
-    getone() {     
-      this.$http
-        .get(`http://localhost:9817/api/Blog/getone?id=${this.articleId}`)
-        .then(res => {
-          if (res.data.code === 20000) {
-            this.editContent = res.data.data;
-            this.hackset = true;
-          } else {
-            this.editContent.content = "文章被删除了,[惊吓]";
-          }
-        });
+    getone() {
+      this.editContent.content = this.articleId;
+      this.hackset = true;
+      // this.$http
+      //   .get(`http://localhost:9817/api/Blog/getone?id=${this.articleId}`)
+      //   .then(res => {
+      //     if (res.data.code === 20000) {
+      //       this.editContent = res.data.data;
+      //       this.hackset = true;
+      //     } else {
+      //       this.editContent.content = "文章被删除了,[惊吓]";
+      //       this.hackset = true;
+      //     }
+      //   });
     },
     closeone() {
       this.hackset = false;

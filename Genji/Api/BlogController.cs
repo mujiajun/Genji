@@ -1,6 +1,9 @@
-﻿using Genji.Data.DataOperation;
+﻿using Genji.Data.Common;
+using Genji.Data.DataOperation;
 using Genji.Model;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Genji.Api
@@ -93,15 +96,55 @@ namespace Genji.Api
 
         [Route("getlist")]
         [HttpPost]
-        public object GetList()
+        public object GetList([FromBody]XPagination page)
         {
-            //throw new System.Exception("我跑异常啦");
             var result = new XResult();
 
-            var select = $"SELECT * FROM BlogArticle WHERE IsDeleted=0";
+            var select = $@"SELECT * FROM BlogArticle WHERE IsDeleted=0 AND {page.WhereTags} AND {page.WhereCategory}
+                            ORDER BY Id DESC
+                            LIMIT {page.Index * page.Size},{page.Size}";
             var list = XDataHelper.ExcuteReader<BlogArticle>(select).ToList();
             result.Data = list;
             return result;
         }
+    }
+    public class XPagination
+    {
+        public int Index { get; set; } = 0;
+        public int Size { get; set; } = 8;
+        /// <summary>
+        /// 默认全部
+        /// </summary>
+        public int Category { get; set; } = 0;
+        /// <summary>
+        /// 以空格字符相隔
+        /// </summary>
+        public string Tags { get; set; }
+
+        [JsonIgnore]
+        public string WhereTags
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Tags))
+                {
+                    var whereString = "(";
+                    var tagList = Tags.Split(' ').ToList();
+                    foreach (var item in tagList)
+                    {
+                        whereString += $"Tags LIKE '%{item.DelSpace()}%' OR";
+                    }
+                    whereString = whereString.Trim("OR") + ")";
+                    return whereString;
+                }
+                return "1=1";
+            }
+        }
+
+        /// <summary>
+        /// 如果分类大于1,才加入where条件语句
+        /// </summary>
+        [JsonIgnore]
+        public string WhereCategory => Category > 0 ? $"Category={Category}" : "1=1";
     }
 }
