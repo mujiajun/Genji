@@ -59,22 +59,16 @@
       </div>
     </div>
     <div class="xpagination">
-      <el-button-group>
-        <el-button type="primary" plain size="small" icon="el-icon-arrow-left">上一页</el-button>
-        <el-button type="primary" plain size="small">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-      </el-button-group>
+      <el-pagination background layout="prev, pager, next" 
+                     :total="articleCount" 
+                     :page-size="8"
+                     @current-change="queryArticle">
+      </el-pagination>
     </div>
 
     <template>
-      <el-dialog fullscreen 
-        center
-        :modal="noShowModal"
-        :visible.sync="dialogVisible"
-        @close="closeone"
-        @open="getone">
-        <x-article  v-if="hackset"
-                    :articleId="articleIndex"
-                    ref="xarticle"></x-article>
+      <el-dialog fullscreen center :modal="noShowModal" :visible.sync="dialogVisible" @close="closeone" @open="getone">
+        <x-article v-if="hackset" :articleId="articleIndex" ref="xarticle"></x-article>
       </el-dialog>
     </template>
   </div>
@@ -96,50 +90,33 @@ export default {
       },
       noShowModal: false,
       articleList: [],
+      articleCount:0,
       query: "",
       hackset: false,
       articleIndex: "",
       dialogVisible: false,
-      currentDate: new Date(),
       options: [
         {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          label: "全部",
+          value: 0
         }
       ],
-      value: ""
+      value: 0
     };
   },
   created() {
     this.getAll(this.xpagination);
+    this.getCategory();
   },
   methods: {
     read(content) {
       this.dialogVisible = true;
       this.articleIndex = content;
     },
-    queryArticle() {
-      alert(this.value);
+    queryArticle(currentPage) {
+      this.xpagination.Category=this.value;
+      this.xpagination.index=currentPage-1;
+      this.getAll(this.xpagination);
     },
     closeone() {
       this.hackset = false;
@@ -149,12 +126,21 @@ export default {
       this.hackset = true;
       this.refs.xarticle.getone();
     },
+    getCategory() {
+      this.$http.get("http://localhost:9817/api/Category").then(res => {
+        if (res.data.code === 20000) {
+          this.options = this.options.concat(res.data.data);
+          console.log(this.options);
+        }
+      });
+    },
     getAll(xpagination) {
       this.$http
-        .post("http://localhost:9817/api/Blog/getlist", this.xpagination)
+        .post("http://localhost:9817/api/Blog/getlist", xpagination)
         .then(res => {
           if (res.data.code === 20000) {
-            this.articleList = res.data.data;
+            this.articleList = res.data.data.content;
+            this.articleCount=res.data.data.count;
           } else {
             this.$message({
               message: res.data.message,
@@ -199,7 +185,7 @@ export default {
   width: 15%;
   height: 60px;
   position: fixed;
-  right: 323px;
+  right: 413px;
   top: 848x;
 }
 .el-select {

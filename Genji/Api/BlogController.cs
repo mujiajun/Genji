@@ -3,6 +3,7 @@ using Genji.Data.DataOperation;
 using Genji.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,14 +47,15 @@ namespace Genji.Api
             var result = new XResult();
 
             var update = $@"UPDATE BlogArticle SET 
-                                   Title = '{model.Title}',
-                                   Category = '{model.Category}',
-                                   Tag = '{model.Tag}',
-                                   Content = '{model.Content}',
-                                   ModifiedTime = NOW()
+                                   Title = @Title,
+                                   Category = {model.Category},
+                                   Tag = @Tag,
+                                   Content = @Content,
+                                   ModifiedTime = '{DateTime.Now}'
                             WHERE ID = @id";
 
-            if (XDataHelper.ExcuteNonQuery(update, new { id }))
+            var whereObj= new { id, Tag = model.Tag, Title = model.Title, Content = model.Content };
+            if (XDataHelper.ExcuteNonQuery(update, whereObj))
             {
                 return result;
             }
@@ -98,13 +100,23 @@ namespace Genji.Api
         [HttpPost]
         public object GetList([FromBody]XPagination page)
         {
-            var result = new XResult();
-
-            var select = $@"SELECT * FROM BlogArticle WHERE IsDeleted=0 AND {page.WhereTags} AND {page.WhereCategory}
+            var whereSql = $"WHERE IsDeleted=0 AND {page.WhereTags} AND {page.WhereCategory}";
+            var selectSql = $@"SELECT * FROM BlogArticle {whereSql}
                             ORDER BY Id DESC
                             LIMIT {page.Index * page.Size},{page.Size}";
-            var list = XDataHelper.ExcuteReader<BlogArticle>(select).ToList();
-            result.Data = list;
+            var countSql = $"SELECT COUNT(1) AS count FROM BlogArticle {whereSql}";
+
+            var list = XDataHelper.ExcuteReader<BlogArticle>(selectSql).ToList();
+
+            var count = XDataHelper.ExcuteScalar<int>(countSql);
+
+            var result = new XResult();
+            //C#匿名对象
+            result.Data = new
+            {
+                Content = list,
+                Count = count
+            };
             return result;
         }
     }

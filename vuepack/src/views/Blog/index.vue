@@ -97,6 +97,10 @@ export default {
 
   data() {
     return {
+      xpagination: {
+        index: 0,
+        size: 20
+      },
       hackReset: false,
       content: {
         Content: "## Vue-markdownEditor",
@@ -125,17 +129,23 @@ export default {
     };
   },
   created() {
-    this.getBlogList();
+    this.getBlogList(this.xpagination);
   },
   methods: {
-    getBlogList() {
-      //this.listLoading = true;
-      getBlogList().then(response => {
-        //console.log(this.listQuery);
-        this.tableData = response.data;
-        //this.listLoading = false;
-        console.log(response.data);
-      });
+    getBlogList(xpagination) {
+      this.$http
+        .post("http://localhost:9817/api/Blog/getlist", this.xpagination)
+        .then(res => {
+          if (res.data.code === 20000) {
+            this.tableData = res.data.data.content;
+          } else {
+            this.$message({
+              message: res.data.message,
+              type: "error"
+            });
+          }
+        })
+        .catch(() => {});
     },
     addNewArticle() {
       this.dialogVisible = false;
